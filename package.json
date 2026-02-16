@@ -1,0 +1,42 @@
+{
+  "name": "glootie-kilo",
+  "version": "2.0.4",
+  "description": "Advanced Claude Code plugin with WFGY integration, MCP tools, and automated hooks",
+  "author": "AnEntrypoint",
+  "license": "MIT",
+  "type": "module",
+  "main": "glootie.mjs",
+  "keywords": [
+    "kilo",
+    "kilo-cli",
+    "mcp",
+    "automation",
+    "glootie"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AnEntrypoint/glootie-kilo.git"
+  },
+  "homepage": "https://github.com/AnEntrypoint/glootie-kilo#readme",
+  "bugs": {
+    "url": "https://github.com/AnEntrypoint/glootie-kilo/issues"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "mcp-thorns": "^4.1.0"
+  },
+  "files": [
+    "agents/",
+    "glootie.mjs",
+    "index.js",
+    "kilocode.json",
+    ".github/",
+    ".mcp.json",
+    "README.md"
+  ]
+}
