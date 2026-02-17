@@ -6,6 +6,8 @@ import { analyze } from 'mcp-thorns';
 const SHELL_TOOLS = ['bash'];
 const SEARCH_TOOLS = ['glob', 'grep', 'list'];
 
+let thornsOutput = '';
+
 export const GlootiePlugin = async ({ project, client, $, directory, worktree }) => {
   const pluginDir = path.dirname(fileURLToPath(import.meta.url));
   let agentRules = '';
@@ -17,27 +19,11 @@ export const GlootiePlugin = async ({ project, client, $, directory, worktree })
     return agentRules;
   };
 
-  const runSessionStart = async () => {
-    if (!client || !client.tui) return;
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const outputs = [];
-    const rules = loadAgentRules();
-    if (rules) outputs.push(rules);
+  const runThornsAnalysis = async () => {
     try {
-      outputs.push('=== mcp-thorns ===\n' + analyze(directory));
+      thornsOutput = '=== mcp-thorns ===\n' + analyze(directory);
     } catch (e) {
-      outputs.push('=== mcp-thorns ===\nSkipped (' + e.message + ')');
-    }
-    if (outputs.length === 0) return;
-    const text = outputs.join('\n\n')
-      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
-      .replace(/[\u2028\u2029]/g, '\n')
-      .trim();
-    try {
-      await client.tui.appendPrompt({ body: { text } });
-    } catch (e) {
-      if (e.message && (e.message.includes('EditBuffer') || e.message.includes('disposed') || e.message.includes('illegal character') || e.message.includes('Array index'))) return;
-      throw e;
+      thornsOutput = '=== mcp-thorns ===\nSkipped (' + e.message + ')';
     }
   };
 
@@ -83,7 +69,7 @@ export const GlootiePlugin = async ({ project, client, $, directory, worktree })
 
   return {
     event: async ({ event }) => {
-      if (event.type === 'session.created') await runSessionStart();
+      if (event.type === 'session.created') await runThornsAnalysis();
       else if (event.type === 'session.idle') await runSessionIdle();
     },
 
@@ -110,11 +96,32 @@ export const GlootiePlugin = async ({ project, client, $, directory, worktree })
     'experimental.chat.system.transform': async (input, output) => {
       const rules = loadAgentRules();
       if (rules) output.system.push(rules);
+      if (thornsOutput) output.system.push(thornsOutput);
     },
 
     'experimental.session.compacting': async (input, output) => {
       const rules = loadAgentRules();
       if (rules) output.context.push(rules);
+    },
+
+    'session.stop': async (input, output) => {
+      const prdFile = path.join(directory, '.prd');
+      if (fs.existsSync(prdFile)) {
+        const prd = fs.readFileSync(prdFile, 'utf-8').trim();
+        if (prd.length > 0) {
+          output.status = 'block';
+          output.reason = 'Work items remain in .prd:\n' + prd;
+          return;
+        }
+      }
+      try {
+        const status = await $`git status --porcelain`.timeout(2000).nothrow();
+        if (status.exitCode === 0 && status.stdout.trim().length > 0) {
+          output.status = 'block';
+          output.reason = 'Git: Uncommitted changes exist';
+          return;
+        }
+      } catch (e) {}
     }
   };
 };
