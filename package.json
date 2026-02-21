@@ -1,6 +1,6 @@
 {
   "name": "glootie-kilo",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Advanced Claude Code plugin with WFGY integration, MCP tools, and automated hooks",
   "author": "AnEntrypoint",
   "license": "MIT",
@@ -16,9 +16,6 @@
     "automation",
     "glootie"
   ],
-  "scripts": {
-    "postinstall": "node -e \"const fs=require('fs'); try { fs.chmodSync('./cli.mjs', 0o755); } catch(e) {}\""
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/AnEntrypoint/glootie-kilo.git"
