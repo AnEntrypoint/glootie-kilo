@@ -6,6 +6,9 @@
   "license": "MIT",
   "type": "module",
   "main": "glootie.mjs",
+  "bin": {
+    "glootie-kilo": "./cli.mjs"
+  },
   "keywords": [
     "kilo",
     "kilo-cli",
@@ -37,6 +40,7 @@
     "kilocode.json",
     ".github/",
     ".mcp.json",
-    "README.md"
+    "README.md",
+    "cli.mjs"
   ]
 }

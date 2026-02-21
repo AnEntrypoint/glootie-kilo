@@ -84,7 +84,7 @@ You should see `dev` and `code-search` marked as connected.
 
 **Plugin not loading:**
 - Verify plugin path in `kilocode.json` is absolute (e.g., `/home/user/.config/kilo/plugin`, not relative)
-- Check `index.js` and `gloutie.mjs` exist in the plugin directory
+- Check `index.js` and `glootie.mjs` exist in the plugin directory
 - Run `bun install` in the plugin directory to ensure dependencies are installed
 
 The plugin activates automatically on session start once MCP servers are configured.
