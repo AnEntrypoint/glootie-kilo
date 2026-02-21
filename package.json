@@ -7,7 +7,8 @@
   "type": "module",
   "main": "glootie.mjs",
   "bin": {
-    "glootie-kilo": "./cli.mjs"
+    "glootie-kilo": "./cli.mjs",
+    "glootie-kilo-install": "./install.mjs"
   },
   "keywords": [
     "kilo",
@@ -41,6 +42,7 @@
     ".github/",
     ".mcp.json",
     "README.md",
-    "cli.mjs"
+    "cli.mjs",
+    "install.mjs"
   ]
 }
