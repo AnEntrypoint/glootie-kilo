@@ -16,6 +16,9 @@
     "automation",
     "glootie"
   ],
+  "scripts": {
+    "postinstall": "node -e \"const fs=require('fs'); try { fs.chmodSync('./cli.mjs', 0o755); } catch(e) {}\""
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/AnEntrypoint/glootie-kilo.git"
